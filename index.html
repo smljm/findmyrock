@@ -6,45 +6,45 @@
   <title>SOUNDMATCH</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
-    /* ── 테마: Sunburst (기본) ── */
+    /* ── 테마: Cherry Sunburst (기본) ── */
     :root {
-      --bg:           #0e0804;
-      --surface:      #160e07;
-      --surface2:     #1e1409;
-      --accent:       #c8650a;
+      --bg:           #0a0204;
+      --surface:      #120408;
+      --surface2:     #1c060c;
+      --accent:       #c0200a;
       --gold:         #c9a84c;
-      --cream:        #e8dfc8;
-      --text:         #e0d4b8;
-      --muted:        #6b5840;
-      --border:       #2a1e10;
-      --red:          #8b1a0a;
-      --fret-bg-1:    #1c0e06;
-      --fret-bg-2:    #241208;
-      --fret-bg-3:    #220f07;
-      --btn-active-bg:   rgba(255, 220, 120, 0.92);
-      --btn-active-text: #1a0d02;
-      --btn-active-glow: rgba(201,168,76,0.55);
-      --btn-hover-bg:    rgba(201,168,76,0.07);
-      --btn-hover-text:  rgba(232,223,200,0.85);
+      --cream:        #f0ddc8;
+      --text:         #e8d0b8;
+      --muted:        #6b4448;
+      --border:       #2a1018;
+      --red:          #8b0a10;
+      --fret-bg-1:    #180608;
+      --fret-bg-2:    #20080c;
+      --fret-bg-3:    #1c0508;
+      --btn-active-bg:   rgba(255, 200, 180, 0.92);
+      --btn-active-text: #1a0204;
+      --btn-active-glow: rgba(192,32,10,0.6);
+      --btn-hover-bg:    rgba(192,32,10,0.08);
+      --btn-hover-text:  rgba(240,220,210,0.88);
       /* 노브 테마 */
-      --knob-body-hi:  #3d2a1a;
-      --knob-body-mid: #1e1208;
-      --knob-body-lo:  #0e0804;
-      --knob-body-dk:  #080502;
-      --knob-ring1:    #3a2c10;
+      --knob-body-hi:  #3d1818;
+      --knob-body-mid: #200808;
+      --knob-body-lo:  #100404;
+      --knob-body-dk:  #080202;
+      --knob-ring1:    #3a1010;
       --knob-ring2:    #c9a84c;
-      --knob-ring3:    #2a1e08;
+      --knob-ring3:    #2a0c0c;
       --knob-ring2-hv: #e8c060;
-      --knob-ring1-hv: #4a3818;
-      --knob-glow:     rgba(201,168,76,0.2);
+      --knob-ring1-hv: #5a1c1c;
+      --knob-glow:     rgba(192,32,10,0.28);
       --knob-tick:     rgba(201,168,76,0.35);
       --knob-tick-edge:#c9a84c;
       --knob-num:      rgba(201,168,76,0.45);
       --knob-num-edge: rgba(201,168,76,0.9);
-      --knob-marker:   #f0e8d0;
-      --panel-bg-1:    #2e1a0a;
-      --panel-bg-2:    #1e0e05;
-      --panel-bg-3:    #150a03;
+      --knob-marker:   #f0e0d0;
+      --panel-bg-1:    #2e0c10;
+      --panel-bg-2:    #1e0608;
+      --panel-bg-3:    #150305;
     }
 
     /* ── 테마: Alpine White ── */
@@ -140,7 +140,7 @@
       content: '';
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
       background: radial-gradient(ellipse 70% 60% at 50% 40%,
-        rgba(200,101,10,0.07) 0%, rgba(92,26,8,0.04) 50%, transparent 80%);
+        rgba(192,20,10,0.10) 0%, rgba(120,8,18,0.06) 50%, transparent 80%);
     }
     body::before {
       content: '';
@@ -563,7 +563,7 @@
       font-family: 'Bebas Neue', sans-serif; font-size: 1.4em; letter-spacing: 0.3em;
       cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; margin-top: 8px;
     }
-    .find-btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, var(--accent), var(--gold)); transform: translateX(-100%); transition: transform 0.3s; z-index: 0; }
+    .find-btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, #c0200a, var(--gold)); transform: translateX(-100%); transition: transform 0.3s; z-index: 0; }
     .find-btn:hover::before { transform: translateX(0); }
     .find-btn:hover { color: #0e0804; }
     .find-btn span { position: relative; z-index: 1; }
@@ -927,7 +927,7 @@
 </header>
 
 <main>
-  <h1 class="headline">당신의<br><em>락</em>을<br>찾아서</h1>
+  <h1 class="headline">당신의<br><em>취향</em>을<br>찾아서</h1>
 
   <div class="section">
     <div class="section-label">장르 선택</div>
@@ -1812,7 +1812,7 @@
 
   /* ── 픽업 셀렉터 — 원근감 세로 토글 ── */
   const THEMES = [
-    { cls: '',            name: 'SUNBURST'    },
+    { cls: '',            name: 'CHERRY SUNBURST' },
     { cls: 'theme-white', name: 'ALPINE WHITE'},
     { cls: 'theme-ebony', name: 'EBONY'       },
   ];
