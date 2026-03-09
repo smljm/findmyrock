@@ -6,45 +6,45 @@
   <title>SOUNDMATCH</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
-    /* ── 테마: Cherry Sunburst (기본) ── */
+    /* ── 테마: Orange Burst (기본) ── */
     :root {
-      --bg:           #0a0204;
-      --surface:      #120408;
-      --surface2:     #1c060c;
-      --accent:       #c0200a;
-      --gold:         #c9a84c;
-      --cream:        #f0ddc8;
-      --text:         #e8d0b8;
-      --muted:        #6b4448;
-      --border:       #2a1018;
-      --red:          #8b0a10;
-      --fret-bg-1:    #180608;
-      --fret-bg-2:    #20080c;
-      --fret-bg-3:    #1c0508;
-      --btn-active-bg:   rgba(255, 200, 180, 0.92);
-      --btn-active-text: #1a0204;
-      --btn-active-glow: rgba(192,32,10,0.6);
-      --btn-hover-bg:    rgba(192,32,10,0.08);
-      --btn-hover-text:  rgba(240,220,210,0.88);
+      --bg:           #080400;
+      --surface:      #120800;
+      --surface2:     #1c0e00;
+      --accent:       #d45a00;
+      --gold:         #e8a020;
+      --cream:        #f5e0c0;
+      --text:         #f0d8a8;
+      --muted:        #7a5830;
+      --border:       #2e1a04;
+      --red:          #a03800;
+      --fret-bg-1:    #1a0c00;
+      --fret-bg-2:    #221200;
+      --fret-bg-3:    #1e0e00;
+      --btn-active-bg:   rgba(255, 210, 160, 0.92);
+      --btn-active-text: #1a0800;
+      --btn-active-glow: rgba(212,90,0,0.65);
+      --btn-hover-bg:    rgba(212,90,0,0.09);
+      --btn-hover-text:  rgba(245,225,190,0.88);
       /* 노브 테마 */
-      --knob-body-hi:  #3d1818;
-      --knob-body-mid: #200808;
-      --knob-body-lo:  #100404;
-      --knob-body-dk:  #080202;
-      --knob-ring1:    #3a1010;
-      --knob-ring2:    #c9a84c;
-      --knob-ring3:    #2a0c0c;
-      --knob-ring2-hv: #e8c060;
-      --knob-ring1-hv: #5a1c1c;
-      --knob-glow:     rgba(192,32,10,0.28);
-      --knob-tick:     rgba(201,168,76,0.35);
-      --knob-tick-edge:#c9a84c;
-      --knob-num:      rgba(201,168,76,0.45);
-      --knob-num-edge: rgba(201,168,76,0.9);
-      --knob-marker:   #f0e0d0;
-      --panel-bg-1:    #2e0c10;
-      --panel-bg-2:    #1e0608;
-      --panel-bg-3:    #150305;
+      --knob-body-hi:  #4a2808;
+      --knob-body-mid: #2e1400;
+      --knob-body-lo:  #180a00;
+      --knob-body-dk:  #0a0400;
+      --knob-ring1:    #3e1e04;
+      --knob-ring2:    #e8a020;
+      --knob-ring3:    #2a1200;
+      --knob-ring2-hv: #f0b840;
+      --knob-ring1-hv: #5e2e08;
+      --knob-glow:     rgba(212,90,0,0.35);
+      --knob-tick:     rgba(232,160,32,0.35);
+      --knob-tick-edge:#e8a020;
+      --knob-num:      rgba(232,160,32,0.45);
+      --knob-num-edge: rgba(232,160,32,0.9);
+      --knob-marker:   #f5e0c0;
+      --panel-bg-1:    #2e1800;
+      --panel-bg-2:    #200e00;
+      --panel-bg-3:    #160800;
     }
 
     /* ── 테마: Alpine White ── */
@@ -140,7 +140,7 @@
       content: '';
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
       background: radial-gradient(ellipse 70% 60% at 50% 40%,
-        rgba(192,20,10,0.10) 0%, rgba(120,8,18,0.06) 50%, transparent 80%);
+        rgba(212,90,0,0.12) 0%, rgba(160,56,0,0.07) 50%, transparent 80%);
     }
     body::before {
       content: '';
@@ -1945,11 +1945,11 @@
 
   /* ── 픽업 셀렉터 — 원근감 세로 토글 ── */
   const THEMES = [
-    { cls: '',            name: 'CHERRY SUNBURST' },
+    { cls: '',            name: 'ORANGE BURST' },
     { cls: 'theme-white', name: 'ALPINE WHITE'},
     { cls: 'theme-ebony', name: 'EBONY'       },
   ];
-  const ACTIVE_COLORS = { '': '#c9a84c', 'theme-white': '#8b3a1a', 'theme-ebony': '#d0d0d0' };
+  const ACTIVE_COLORS = { '': '#e8a020', 'theme-white': '#8b3a1a', 'theme-ebony': '#d0d0d0' };
   const MUTED_COLOR   = '#6b5840';
 
   // 피벗(봉 뿌리): 항상 cx=45, cy=60 (원 중심)
