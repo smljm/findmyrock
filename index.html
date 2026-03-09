@@ -515,8 +515,8 @@
       width: 3px; height: 18px;
       background: linear-gradient(to bottom, var(--knob-marker) 0%, rgba(200,180,150,0.6) 100%);
       border-radius: 1.5px;
-      top: 6px; left: 50%;
-      transform-origin: 50% calc(96px / 2 - 6px);
+      left: 50%;
+      transform-origin: 50% 100%;
       transform: translateX(-50%) rotate(0deg);
       transition: transform 0.25s cubic-bezier(.25,.8,.25,1), background 0.4s ease, box-shadow 0.4s ease;
       box-shadow: 0 0 6px var(--knob-glow);
@@ -1144,55 +1144,96 @@
   KNOB_DEFS.forEach(k => { state[k.id] = DEFAULT; state['f-'+k.id] = DEFAULT; });
 
   function buildKnob(id, name, prefix, mini) {
-    const fid = prefix + id;
-    const sz  = mini ? 64 : 96;
-    const mh  = mini ? 12 : 18;
-    const mo  = `calc(${sz}px / 2 - 6px)`;
+    const fid   = prefix + id;
+    const sz    = mini ? 64 : 96;
+    const half  = sz / 2;
 
-    const r = sz / 2 + 14;
-    const cx = r, cy = r;
+    const ringR   = half + (mini ? 3 : 4);
+    const dotR    = ringR;
+    const trackR  = ringR + (mini ? 5 : 7);
+    const tickIn  = trackR - (mini ? 2 : 3);
+    const tickOut = trackR + (mini ? 2 : 3);
+    const numR    = trackR + (mini ? 10 : 13);
+
+    const svgSz = sz + (mini ? 64 : 76);
+    const cx = svgSz / 2, cy = svgSz / 2;
+
     const totalDeg = 270;
     const startDeg = -135;
+
+    function polarXY(r, deg) {
+      const rad = (deg - 90) * Math.PI / 180;
+      return [cx + r * Math.cos(rad), cy + r * Math.sin(rad)];
+    }
+    const [ax1, ay1] = polarXY(trackR, startDeg);
+    const [ax2, ay2] = polarXY(trackR, startDeg + totalDeg);
+    const trackArc = `M${ax1.toFixed(1)},${ay1.toFixed(1)} A${trackR},${trackR} 0 1 1 ${ax2.toFixed(1)},${ay2.toFixed(1)}`;
+
     let ticks = '';
     for (let i = 1; i <= 10; i++) {
       const deg = startDeg + ((i - 1) / 9) * totalDeg;
       const rad = (deg - 90) * Math.PI / 180;
-      const inner = r - 7;
-      const outer = r - 2;
-      const x1 = cx + inner * Math.cos(rad);
-      const y1 = cy + inner * Math.sin(rad);
-      const x2 = cx + outer * Math.cos(rad);
-      const y2 = cy + outer * Math.sin(rad);
-      const nr  = r + (mini ? 9 : 11);
-      const nx  = cx + nr * Math.cos(rad);
-      const ny  = cy + nr * Math.sin(rad);
+      const x1 = cx + tickIn  * Math.cos(rad);
+      const y1 = cy + tickIn  * Math.sin(rad);
+      const x2 = cx + tickOut * Math.cos(rad);
+      const y2 = cy + tickOut * Math.sin(rad);
+      const nx  = cx + numR   * Math.cos(rad);
+      const ny  = cy + numR   * Math.sin(rad);
       const isEdge = i === 1 || i === 10;
       ticks += `
         <line class="knob-tick-line${isEdge ? ' knob-tick-edge' : ''}"
           x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"
-          stroke-width="${isEdge ? 1.5 : 1}" stroke-linecap="round"/>
+          stroke-width="${isEdge ? 1.5 : 0.9}" stroke-linecap="round"/>
         <text class="knob-tick-num${isEdge ? ' knob-tick-num-edge' : ''}"
           x="${nx.toFixed(1)}" y="${ny.toFixed(1)}"
           font-family="Bebas Neue, sans-serif"
-          font-size="${mini ? 7 : 9}"
+          font-size="${mini ? 7 : 8.5}"
           text-anchor="middle" dominant-baseline="middle">${i}</text>
       `;
     }
-    const svgSize = (r + 18) * 2;
+
+    const initRad = (valToAngle(5) - 90) * Math.PI / 180;
+    const initDx  = cx + dotR * Math.cos(initRad);
+    const initDy  = cy + dotR * Math.sin(initRad);
 
     return `
       <div class="knob-unit">
-        <div style="position:relative;width:${sz + 48}px;height:${sz + 48}px;display:flex;align-items:center;justify-content:center;">
-          <svg width="${svgSize}" height="${svgSize}"
-            style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none;overflow:visible">
+        <div style="position:relative;width:${svgSz}px;height:${svgSz}px;display:flex;align-items:center;justify-content:center;">
+          <svg id="svg-${fid}" width="${svgSz}" height="${svgSz}"
+            style="position:absolute;inset:0;pointer-events:none;overflow:visible;">
+            <defs>
+              <filter id="dotGlow-${fid}" x="-300%" y="-300%" width="700%" height="700%">
+                <feGaussianBlur stdDeviation="${mini ? 3 : 4}" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <filter id="ringGlow-${fid}" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="1.5" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <path d="${trackArc}" fill="none"
+              stroke="rgba(201,168,76,0.10)" stroke-width="${mini ? 3 : 4}"
+              stroke-linecap="round"/>
             ${ticks}
+            <circle cx="${cx}" cy="${cy}" r="${ringR}"
+              fill="none"
+              stroke="rgba(201,168,76,0.25)" stroke-width="${mini ? 1.5 : 2}"
+              filter="url(#ringGlow-${fid})"/>
+            <circle id="dot-${fid}"
+              cx="${initDx.toFixed(1)}" cy="${initDy.toFixed(1)}"
+              r="${mini ? 4.5 : 6}"
+              fill="var(--gold)"
+              filter="url(#dotGlow-${fid})"/>
+            <circle id="dot-hi-${fid}"
+              cx="${(initDx - (mini?0.8:1.2)).toFixed(1)}"
+              cy="${(initDy - (mini?0.8:1.2)).toFixed(1)}"
+              r="${mini ? 1.5 : 2}"
+              fill="rgba(255,252,230,0.75)"/>
           </svg>
           <div class="knob-outer" id="outer-${fid}"
-            style="width:${sz}px;height:${sz}px;flex-shrink:0"
+            style="width:${sz}px;height:${sz}px;flex-shrink:0;position:relative;"
             onclick="clickStep('${fid}')"
             onwheel="wheelStep(event,'${fid}')">
-            <div class="knob-marker" id="marker-${fid}"
-              style="height:${mh}px;transform-origin:50% ${mo};transform:translateX(-50%) rotate(0deg)"></div>
           </div>
         </div>
         <div class="step-btns">
@@ -1205,15 +1246,14 @@
     `;
   }
 
-  /* SVG 눈금 색상을 현재 테마 CSS 변수에서 읽어서 동기화 */
+  /* SVG 눈금·점 색상을 현재 테마 CSS 변수에서 동기화 */
   function updateKnobSVGs() {
-    const style = getComputedStyle(document.documentElement);
+    const style    = getComputedStyle(document.documentElement);
     const tick     = style.getPropertyValue('--knob-tick').trim();
     const tickEdge = style.getPropertyValue('--knob-tick-edge').trim();
     const num      = style.getPropertyValue('--knob-num').trim();
     const numEdge  = style.getPropertyValue('--knob-num-edge').trim();
-    const marker   = style.getPropertyValue('--knob-marker').trim();
-    const glow     = style.getPropertyValue('--knob-glow').trim();
+    const gold     = style.getPropertyValue('--gold').trim();
 
     document.querySelectorAll('.knob-tick-line').forEach(el => {
       el.setAttribute('stroke', tick);
@@ -1227,9 +1267,9 @@
     document.querySelectorAll('.knob-tick-num.knob-tick-num-edge').forEach(el => {
       el.setAttribute('fill', numEdge);
     });
-    document.querySelectorAll('.knob-marker').forEach(el => {
-      el.style.background = `linear-gradient(to bottom, ${marker} 0%, ${marker}99 100%)`;
-      el.style.boxShadow  = `0 0 6px ${glow}`;
+    // 활성 점도 gold 색상으로 동기화
+    document.querySelectorAll('[id^="dot-"]').forEach(el => {
+      el.setAttribute('fill', gold);
     });
   }
 
@@ -1239,11 +1279,30 @@
     KNOB_DEFS.map(k => buildKnob(k.id, k.name, 'f-', true)).join('');
 
   function applyVal(fid) {
-    const v = state[fid];
-    const marker = document.getElementById(`marker-${fid}`);
-    const valEl  = document.getElementById(`sval-${fid}`);
-    if (marker) marker.style.transform = `translateX(-50%) rotate(${valToAngle(v)}deg)`;
-    if (valEl)  valEl.textContent = v;
+    const v     = state[fid];
+    const valEl = document.getElementById(`sval-${fid}`);
+    if (valEl) valEl.textContent = v;
+
+    const dot   = document.getElementById(`dot-${fid}`);
+    const dotHi = document.getElementById(`dot-hi-${fid}`);
+    if (!dot) return;
+    const svg   = dot.closest('svg');
+    const svgSz = parseFloat(svg.getAttribute('width'));
+    const cx    = svgSz / 2, cy = svgSz / 2;
+    const outer = document.getElementById(`outer-${fid}`);
+    const sz    = outer ? parseFloat(outer.style.width) : 96;
+    const mini  = sz < 80;
+    const dotR  = sz / 2 + (mini ? 3 : 4);
+    const deg   = valToAngle(v);
+    const rad   = (deg - 90) * Math.PI / 180;
+    const dx    = cx + dotR * Math.cos(rad);
+    const dy    = cy + dotR * Math.sin(rad);
+    dot.setAttribute('cx', dx.toFixed(1));
+    dot.setAttribute('cy', dy.toFixed(1));
+    if (dotHi) {
+      dotHi.setAttribute('cx', (dx - (mini ? 0.8 : 1.2)).toFixed(1));
+      dotHi.setAttribute('cy', (dy - (mini ? 0.8 : 1.2)).toFixed(1));
+    }
   }
 
   function setVal(fid, v) {
